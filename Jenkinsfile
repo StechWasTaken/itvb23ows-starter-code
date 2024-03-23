@@ -6,7 +6,7 @@ pipeline {
                 sh 'php --version'
             }
         }
-        stage {
+        stage('sonarqube') {
             steps{
                 script { scannerHome = tool 'SonarQube Scanner' }
                 withSonarQubeEnv('SonarQube') {
