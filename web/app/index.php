@@ -1,7 +1,9 @@
 <?php
     session_start();
-
-    include_once 'util.php';
+    
+    require_once __DIR__ . '/vendor/autoload.php';
+    
+    include_once 'src/util.php';
 
     if (!isset($_SESSION['board'])) {
         header('Location: restart.php');
@@ -10,6 +12,9 @@
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
     $hand = $_SESSION['hand'];
+
+    
+
 
     $to = [];
     foreach ($GLOBALS['OFFSETS'] as $pq) {

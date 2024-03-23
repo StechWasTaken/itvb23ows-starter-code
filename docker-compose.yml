@@ -1,28 +1,41 @@
 version: "3.8"
 services:
   web:
-    build: .
+    build: ./web
     depends_on:
       - db
     ports:
       - "8000:8000"
+    volumes:
+      - ./web/app:/var/www/html
     networks:
       - hive-network
-    volumes:
-      - ./src:/var/www/html # hot reloading for development
 
   db:
-    image: mysql:8.0.36
+    build: ./database
     ports:
       - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: hive
-    volumes:
-      - ./hive.sql:/docker-entrypoint-initdb.d/hive.sql
     networks:
       - hive-network
 
+  jenkins:
+    build: ./jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - hive-network
+
+  sonarqube:
+    build: ./sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - hive-network
+    
 networks:
   hive-network:
     driver: bridge
