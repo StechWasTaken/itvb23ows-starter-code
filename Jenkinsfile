@@ -6,12 +6,5 @@ pipeline {
                 sh 'php --version'
             }
         }
-        stage('sonarqube') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
     }
 }
