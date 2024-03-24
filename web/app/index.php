@@ -2,19 +2,14 @@
     session_start();
     
     require_once __DIR__ . '/vendor/autoload.php';
-    
-    include_once 'src/util.php';
 
     if (!isset($_SESSION['board'])) {
-        header('Location: restart.php');
         exit(0);
     }
+
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
     $hand = $_SESSION['hand'];
-
-    
-
 
     $to = [];
     foreach ($GLOBALS['OFFSETS'] as $pq) {
@@ -129,7 +124,7 @@
         <div class="turn">
             Turn: <?php if ($player == 0) echo "White"; else echo "Black"; ?>
         </div>
-        <form method="post" action="play.php">
+        <form method="post" action="">
             <select name="piece">
                 <?php
                     foreach ($hand[$player] as $tile => $ct) {
@@ -146,7 +141,7 @@
             </select>
             <input type="submit" value="Play">
         </form>
-        <form method="post" action="move.php">
+        <form method="post" action="">
             <select name="from">
                 <?php
                     foreach (array_keys($board) as $pos) {
@@ -163,16 +158,16 @@
             </select>
             <input type="submit" value="Move">
         </form>
-        <form method="post" action="pass.php">
+        <form method="post" action="">
             <input type="submit" value="Pass">
         </form>
-        <form method="post" action="restart.php">
+        <form method="post" action="">
             <input type="submit" value="Restart">
         </form>
         <strong><?php if (isset($_SESSION['error'])) echo($_SESSION['error']); unset($_SESSION['error']); ?></strong>
         <ol>
             <?php
-                $db = include 'database.php';
+                $db = include 'src/database.php';
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -181,9 +176,8 @@
                 }
             ?>
         </ol>
-        <form method="post" action="undo.php">
+        <form method="post" action="">
             <input type="submit" value="Undo">
         </form>
     </body>
 </html>
-
