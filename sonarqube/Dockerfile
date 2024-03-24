@@ -1,2 +1,2 @@
-FROM sonarqube:8.9.2-community
+FROM sonarqube:latest
 EXPOSE 9000

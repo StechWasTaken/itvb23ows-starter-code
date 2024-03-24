@@ -6,6 +6,10 @@ services:
       - db
     ports:
       - "8000:8000"
+    environment:
+      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
+      - MYSQL_DB_USER=${MYSQL_DB_USER}
+      - MYSQL_DB_PASSWORD=${MYSQL_DB_PASSWORD}
     volumes:
       - ./web/app:/var/www/html
     networks:
@@ -16,8 +20,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_DATABASE: hive
+      MYSQL_ALLOW_EMPTY_PASSWORD: "1"
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
     networks:
       - hive-network
 
@@ -25,19 +29,20 @@ services:
     build: ./jenkins
     restart: on-failure
     environment:
-      DOCKER_HOST: tcp://docker:2376
-      DOCKER_CERT_PATH: /certs/client
-      DOCKER_TLS_VERIFY: '1'
+      DOCKER_HOST: "tcp://docker:2376"
+      DOCKER_CERT_PATH: "/certs/client"
+      DOCKER_TLS_VERIFY: "1"
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins-data:/var/jenkins_home
-      - jenkins-docker-certs:/certs/client:ro
+      - jenkins-docker-certs:/certs/client
     networks:
       - jenkins
 
   sonarqube:
+    container_name: sonarqube
     build: ./sonarqube
     ports:
       - "9000:9000"
