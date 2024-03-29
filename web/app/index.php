@@ -6,7 +6,7 @@
     include_once 'src/util.php';
 
     if (!isset($_SESSION['board'])) {
-        header('Location: restart.php');
+        header('Location: src/restart.php');
         exit(0);
     }
     $board = $_SESSION['board'];
@@ -151,7 +151,7 @@
                 }
             ?>
         </div>
-        <form method="post" action="">
+        <form method="post" action="src/play.php">
             <select name="piece">
                 <?php
                     foreach ($hand[$player] as $tile => $ct) 
@@ -170,7 +170,7 @@
             </select>
             <input type="submit" value="Play">
         </form>
-        <form method="post" action="">
+        <form method="post" action="src/move.php">
             <select name="from">
                 <?php
                     foreach (array_keys($board) as $pos) 
@@ -189,10 +189,10 @@
             </select>
             <input type="submit" value="Move">
         </form>
-        <form method="post" action="">
+        <form method="post" action="src/pass.php">
             <input type="submit" value="Pass">
         </form>
-        <form method="post" action="">
+        <form method="post" action="src/restart.php">
             <input type="submit" value="Restart">
         </form>
         <strong>
@@ -218,7 +218,7 @@
                 }
             ?>
         </ol>
-        <form method="post" action="">
+        <form method="post" action="src/undo.php">
             <input type="submit" value="Undo">
         </form>
     </body>

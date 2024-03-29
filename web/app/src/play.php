@@ -44,4 +44,4 @@ else
     $_SESSION['last_move'] = $db->insert_id;
 }
 
-header('Location: index.php');
+header('Location: ../index.php');
