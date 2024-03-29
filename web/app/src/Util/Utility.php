@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use mysqli;
+
 class Utility
 {
     public const OFFSETS = [[0, 1], [0, -1], [1, 0], [-1, 0], [-1, 1], [1, -1]];
@@ -100,5 +102,10 @@ class Utility
         $lenTo = self::len($board[$to]);
 
         return min($lenCommon0, $lenCommon1) <= max($lenFrom, $lenTo);
+    }
+
+    public static function undoMove(mysqli $db, int $gameId, int $lastMove)
+    {
+        // stub
     }
 }
