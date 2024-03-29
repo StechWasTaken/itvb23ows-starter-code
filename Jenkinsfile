@@ -8,6 +8,9 @@ pipeline {
         }
         stage('phpunit tests') {
             steps {
+                sh 'php -v'
+                sh 'composer -v'
+                sh 'ls'
                 sh 'cd web/app'
                 sh 'composer install'
                 sh 'vendor/bin/phpunit tests'
