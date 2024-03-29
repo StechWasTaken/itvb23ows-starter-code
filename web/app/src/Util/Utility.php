@@ -106,17 +106,27 @@ class Utility
 
     public static function getPreviousMove(mysqli $db, int $gameId): int
     {
-        return -1; // stub
+        $stmt = $db->prepare('SELECT previous_id FROM moves WHERE game_id = ? ORDER BY id DESC LIMIT 1');
+        $stmt->bind_param("i", $gameId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['previous_id'];
     }
 
     public static function undoMove(mysqli $db, int $gameId, int $moveId): bool
     {
-        return false; // stub
+        $stmt = $db->prepare('DELETE FROM moves WHERE id = ? AND game_id = ?');
+        $stmt->bind_param("ii", $moveId, $gameId);
+        return $stmt->execute();
     }
 
     public static function getPreviousState(mysqli $db, int $gameId, int $previousMoveId): string
     {
-        return ''; // stub
+        $stmt = $db->prepare('SELECT state FROM moves WHERE game_id = ? AND id = ?');
+        $stmt->bind_param("ii", $gameId, $previousMoveId);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result['state'];
     }
 
 }
