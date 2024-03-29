@@ -11,7 +11,10 @@ pipeline {
                 sh 'php -v'
                 sh 'composer -v'
                 sh 'ls'
-                sh 'cd web/app'
+                sh 'cd web'
+                sh 'ls'
+                sh 'cd app'
+                sh 'ls'
                 sh 'composer install'
                 sh 'vendor/bin/phpunit tests'
             }
