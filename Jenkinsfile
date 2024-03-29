@@ -14,7 +14,7 @@ pipeline {
                 dir('web') {
                     dir('app') {
                         sh 'composer install'
-                        sh 'XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover coverage.xml tests'
+                        sh 'XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage.xml --whitelist=src/ tests/'
                     }
                 }
             }
