@@ -1,2 +1,2 @@
-FROM sonarqube:latest
+FROM sonarqube:10.4.1.88267
 EXPOSE 9000
