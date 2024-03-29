@@ -40,7 +40,7 @@ else {
         while ($queue)
         {
             $next = explode(',', array_shift($queue));
-            foreach ($GLOBALS['OFFSETS'] as $pq)
+            foreach (Utility::OFFSETS as $pq)
             {
                 list($p, $q) = $pq;
                 $p += $next[0];
@@ -97,6 +97,7 @@ else {
         }
 
         $_SESSION['player'] = 1 - $_SESSION['player'];
+        $db = DatabaseHelper::getDatabase();
         $stmt = $db->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state)
                              values (?, "move", ?, ?, ?, ?)');
         $stmt->bind_param(
