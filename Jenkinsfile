@@ -23,7 +23,7 @@ pipeline {
             steps{
                 script { scannerHome = tool 'SonarQube Scanner' }
                 withSonarQubeEnv('ows-sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows -Dsonar.coverageReportPaths=web/app/coverage.xml"
                 }
             }
         }
