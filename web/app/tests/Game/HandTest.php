@@ -99,4 +99,19 @@ class HandTest extends TestCase
 
         $this->assertEquals(3, $hand->countPiece('G'));
     }
+
+    public function testHand11()
+    {
+        $hand = new Hand();
+
+        $pieces = [
+            'Q' => 1,
+            'B' => 2,
+            'S' => 2,
+            'A' => 3,
+            'G' => 3,
+        ];
+
+        $this->assertEquals($pieces, $hand->getPieces());
+    }
 }

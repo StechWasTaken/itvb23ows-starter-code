@@ -63,4 +63,9 @@ class Hand
             $this->pieces[$piece] = min(self::PIECES[$piece], $this->pieces[$piece]);
         }
     }
+
+    public function getPieces()
+    {
+        return []; // stub
+    }
 }
