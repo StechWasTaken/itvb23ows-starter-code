@@ -22,7 +22,12 @@ class Hand
         return false; // stub
     }
 
-    public function removePiece($piece, $amount = 1)
+    public function countPiece($piece)
+    {
+        return -1; // stub
+    }
+
+    public function removePiece($piece)
     {
         return null; // stub
     }
