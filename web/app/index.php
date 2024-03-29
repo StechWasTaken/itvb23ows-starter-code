@@ -222,11 +222,11 @@
                 $db = DatabaseHelper::getDatabase();
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
-                $result = $stmt->get_result();
+                $result = $stmt->get_result()->fetch_assoc();
 
-                while ($row = $result->fetch_array())
+                foreach ($result as $row)
                 {
-                    echo '<li>'.$row[2].' '.$row[3].' '.$row[4].'</li>';
+                    echo '<li>'.$row['type'].' '.$row['move_from'].' '.$row['move_to'].'</li>';
                 }
             ?>
         </ol>

@@ -104,7 +104,7 @@ class Utility
         return min($lenCommon0, $lenCommon1) <= max($lenFrom, $lenTo);
     }
 
-    public static function getPreviousMove(mysqli $db, int $gameId): int
+    public static function getPreviousMove(mysqli $db, int $gameId): int | null
     {
         $stmt = $db->prepare('SELECT previous_id FROM moves WHERE game_id = ? ORDER BY id DESC LIMIT 1');
         $stmt->bind_param("i", $gameId);
