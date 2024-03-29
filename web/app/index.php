@@ -5,29 +5,35 @@
     
     include_once 'src/util.php';
 
-    if (!isset($_SESSION['board'])) {
+    if (!isset($_SESSION['board'])) 
+    {
         header('Location: restart.php');
         exit(0);
     }
+
     $board = $_SESSION['board'];
     $player = $_SESSION['player'];
     $hand = $_SESSION['hand'];
 
-    
-
-
     $to = [];
-    foreach ($GLOBALS['OFFSETS'] as $pq) {
-        foreach (array_keys($board) as $pos) {
+    foreach ($GLOBALS['OFFSETS'] as $pq) 
+    {
+        foreach (array_keys($board) as $pos) 
+        {
             $pq2 = explode(',', $pos);
             $to[] = ($pq[0] + $pq2[0]).','.($pq[1] + $pq2[1]);
         }
     }
+
     $to = array_unique($to);
-    if (!count($to)) $to[] = '0,0';
+
+    if (!count($to)) 
+    {
+        $to[] = '0,0';
+    }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en" xml:lang="en">
     <head>
         <title>Hive</title>
         <style>
@@ -83,12 +89,16 @@
             <?php
                 $min_p = 1000;
                 $min_q = 1000;
-                foreach ($board as $pos => $tile) {
+
+                foreach ($board as $pos => $tile) 
+                {
                     $pq = explode(',', $pos);
                     if ($pq[0] < $min_p) $min_p = $pq[0];
                     if ($pq[1] < $min_q) $min_q = $pq[1];
                 }
-                foreach (array_filter($board) as $pos => $tile) {
+
+                foreach (array_filter($board) as $pos => $tile) 
+                {
                     $pq = explode(',', $pos);
                     $pq[0];
                     $pq[1];
@@ -109,8 +119,10 @@
         <div class="hand">
             White:
             <?php
-                foreach ($hand[0] as $tile => $ct) {
-                    for ($i = 0; $i < $ct; $i++) {
+                foreach ($hand[0] as $tile => $ct) 
+                {
+                    for ($i = 0; $i < $ct; $i++) 
+                    {
                         echo '<div class="tile player0"><span>'.$tile."</span></div> ";
                     }
                 }
@@ -119,27 +131,41 @@
         <div class="hand">
             Black:
             <?php
-            foreach ($hand[1] as $tile => $ct) {
-                for ($i = 0; $i < $ct; $i++) {
-                    echo '<div class="tile player1"><span>'.$tile."</span></div> ";
+                foreach ($hand[1] as $tile => $ct) 
+                {
+                    for ($i = 0; $i < $ct; $i++) 
+                    {
+                        echo '<div class="tile player1"><span>'.$tile."</span></div> ";
+                    }
                 }
-            }
             ?>
         </div>
         <div class="turn">
-            Turn: <?php if ($player == 0) echo "White"; else echo "Black"; ?>
+            Turn: 
+            <?php 
+                if ($player == 0) 
+                {
+                    echo "White";
+                }
+                else 
+                {
+                    echo "Black";
+                }
+            ?>
         </div>
         <form method="post" action="play.php">
             <select name="piece">
                 <?php
-                    foreach ($hand[$player] as $tile => $ct) {
+                    foreach ($hand[$player] as $tile => $ct) 
+                    {
                         echo "<option value=\"$tile\">$tile</option>";
                     }
                 ?>
             </select>
             <select name="to">
                 <?php
-                    foreach ($to as $pos) {
+                    foreach ($to as $pos) 
+                    {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
@@ -149,14 +175,16 @@
         <form method="post" action="move.php">
             <select name="from">
                 <?php
-                    foreach (array_keys($board) as $pos) {
+                    foreach (array_keys($board) as $pos) 
+                    {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
             </select>
             <select name="to">
                 <?php
-                    foreach ($to as $pos) {
+                    foreach ($to as $pos) 
+                    {
                         echo "<option value=\"$pos\">$pos</option>";
                     }
                 ?>
@@ -169,14 +197,25 @@
         <form method="post" action="restart.php">
             <input type="submit" value="Restart">
         </form>
-        <strong><?php if (isset($_SESSION['error'])) echo($_SESSION['error']); unset($_SESSION['error']); ?></strong>
+        <strong>
+            <?php 
+                if (isset($_SESSION['error'])) 
+                {
+                    echo $_SESSION['error']; 
+                    unset($_SESSION['error']);
+                }
+            ?>
+        </strong>
         <ol>
             <?php
-                $db = include 'database.php';
+                $db = include_once 'database.php';
+
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                while ($row = $result->fetch_array()) {
+
+                while ($row = $result->fetch_array()) 
+                {
                     echo '<li>'.$row[2].' '.$row[3].' '.$row[4].'</li>';
                 }
             ?>
@@ -186,4 +225,3 @@
         </form>
     </body>
 </html>
-
