@@ -206,7 +206,7 @@
         </strong>
         <ol>
             <?php
-                $db = include_once 'database.php';
+                $db = include_once 'src/database.php';
 
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
