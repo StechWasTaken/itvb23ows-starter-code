@@ -2,7 +2,10 @@
 
 session_start();
 
-include_once 'util.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\Database\DatabaseHelper;
+use App\Util\Utility;
 
 $from = $_POST['from'];
 $to = $_POST['to'];
@@ -26,7 +29,7 @@ elseif ($hand['Q'])
 }
 else {
     $tile = array_pop($board[$from]);
-    if (!hasNeighBour($to, $board))
+    if (!Utility::hasNeighBour($to, $board))
     {
         $_SESSION['error'] = "Move would split hive";
     }
@@ -65,7 +68,7 @@ else {
             }
             elseif ($tile[1] == "Q" || $tile[1] == "B")
             {
-                if (!slide($board, $from, $to))
+                if (!Utility::slide($board, $from, $to))
                 {
                     $_SESSION['error'] = 'Tile must slide';
                 }
@@ -94,10 +97,16 @@ else {
         }
 
         $_SESSION['player'] = 1 - $_SESSION['player'];
-        $db = include_once 'database.php';
         $stmt = $db->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state)
                              values (?, "move", ?, ?, ?, ?)');
-        $stmt->bind_param('issis', $_SESSION['game_id'], $from, $to, $_SESSION['last_move'], getState());
+        $stmt->bind_param(
+            'issis',
+            $_SESSION['game_id'],
+            $from,
+            $to,
+            $_SESSION['last_move'],
+            DatabaseHelper::getState()
+        );
         $stmt->execute();
         $_SESSION['last_move'] = $db->insert_id;
     }

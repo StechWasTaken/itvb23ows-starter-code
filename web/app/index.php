@@ -3,7 +3,8 @@
     
     require_once __DIR__ . '/vendor/autoload.php';
     
-    include_once 'src/util.php';
+    use App\Util\Utility;
+    use App\Database\DatabaseHelper;
 
     if (!isset($_SESSION['board'])) {
         header('Location: src/restart.php');
@@ -15,7 +16,7 @@
     $hand = $_SESSION['hand'];
 
     $to = [];
-    foreach ($GLOBALS['OFFSETS'] as $pq)
+    foreach (Utility::OFFSETS as $pq)
     {
         foreach (array_keys($board) as $pos)
         {
@@ -208,7 +209,7 @@
             <input type="submit" value="Restart">
         </form>
         <strong>
-            <?php 
+            <?php
                 if (isset($_SESSION['error']))
                 {
                     echo $_SESSION['error'];
@@ -218,8 +219,7 @@
         </strong>
         <ol>
             <?php
-                $db = include_once 'src/database.php';
-
+                $db = DatabaseHelper::getDatabase();
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
                 $result = $stmt->get_result();

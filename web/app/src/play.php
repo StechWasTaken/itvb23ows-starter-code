@@ -2,7 +2,10 @@
 
 session_start();
 
-include_once 'util.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use App\Util\Utility;
+use App\Database\DatabaseHelper;
 
 $piece = $_POST['piece'];
 $to = $_POST['to'];
@@ -19,11 +22,11 @@ elseif (isset($board[$to]))
 {
     $_SESSION['error'] = 'Board position is not empty';
 }
-elseif (count($board) && !hasNeighBour($to, $board))
+elseif (count($board) && !Utility::hasNeighBour($to, $board))
 {
     $_SESSION['error'] = "board position has no neighbour";
 }
-elseif (array_sum($hand) < 11 && !neighboursAreSameColor($player, $to, $board))
+elseif (array_sum($hand) < 11 && !Utility::neighboursAreSameColor($player, $to, $board))
 {
     $_SESSION['error'] = "Board position has opposing neighbour";
 }
@@ -36,10 +39,10 @@ else
     $_SESSION['board'][$to] = [[$_SESSION['player'], $piece]];
     $_SESSION['hand'][$player][$piece]--;
     $_SESSION['player'] = 1 - $_SESSION['player'];
-    $db = include_once 'database.php';
-    $stmt = $db->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state) 
+    $db = DatabaseHelper::getDatabase();
+    $stmt = $db->prepare('insert into moves (game_id, type, move_from, move_to, previous_id, state)
                          values (?, "play", ?, ?, ?, ?)');
-    $state = getState();
+    $state = DatabaseHelper::getState();
     $stmt->bind_param('issis', $_SESSION['game_id'], $piece, $to, $_SESSION['last_move'], $state);
     $stmt->execute();
     $_SESSION['last_move'] = $db->insert_id;
