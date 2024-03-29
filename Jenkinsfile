@@ -14,7 +14,7 @@ pipeline {
                 dir('web') {
                     dir('app') {
                         sh 'composer install'
-                        sh 'XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage.xml tests'
+                        sh 'vendor/bin/phpunit tests'
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             steps{
                 script { scannerHome = tool 'SonarQube Scanner' }
                 withSonarQubeEnv('ows-sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows -Dsonar.coverageReportPaths=web/app/coverage.xml"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=ows"
                 }
             }
         }
