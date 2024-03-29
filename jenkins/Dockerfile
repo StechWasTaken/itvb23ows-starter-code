@@ -13,7 +13,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
   $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 RUN \
   apt-get update \
-  && apt-get install -y docker-ce-cli curl php php-mysqli composer \
+  && apt-get install -y docker-ce-cli curl php php-mysqli php-dom composer \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 USER jenkins

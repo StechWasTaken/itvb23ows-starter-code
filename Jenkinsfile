@@ -14,7 +14,7 @@ pipeline {
                 dir('web') {
                     dir('app') {
                         sh 'composer install'
-                        sh 'vendor/bin/phpunit tests'
+                        sh 'vendor/bin/phpunit --coverage-clover coverage.xml tests'
                     }
                 }
             }
