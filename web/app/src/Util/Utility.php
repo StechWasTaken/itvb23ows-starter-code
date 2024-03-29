@@ -8,27 +8,19 @@ class Utility
 
     public static function isNeighbour($a, $b)
     {
-        $a = explode(',', $a);
-        $b = explode(',', $b);
-
-        $result = false;
+        list($x1, $y1) = explode(',', $a);
+        list($x2, $y2) = explode(',', $b);
         
-        if ($a[0] == $b[0] && abs($a[1] - $b[1]) == 1)
+        foreach (self::OFFSETS as $offset)
         {
-            $result = true;
+            list($x, $y) = $offset;
+            if ($x1 + $x == $x2 && $y1 + $y == $y2)
+            {
+                return true;
+            }
         }
 
-        if ($a[1] == $b[1] && abs($a[0] - $b[0]) == 1)
-        {
-            $result = true;
-        }
-
-        if ($a[0] + $a[1] == $b[0] + $b[1])
-        {
-            $result = true;
-        }
-
-        return $result;
+        return false;
     }
 
     public static function hasNeighBour($a, $board)
