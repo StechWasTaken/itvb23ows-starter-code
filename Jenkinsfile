@@ -11,12 +11,12 @@ pipeline {
                 sh 'php -v'
                 sh 'composer -v'
                 sh 'ls'
-                sh 'cd web'
-                sh 'ls'
-                sh 'cd app'
-                sh 'ls'
-                sh 'composer install'
-                sh 'vendor/bin/phpunit tests'
+                dir('web') {
+                    dir('app') {
+                        sh 'composer install'
+                        sh 'vendor/bin/phpunit tests'
+                    }
+                }
             }
         }
         stage('sonarqube') {
