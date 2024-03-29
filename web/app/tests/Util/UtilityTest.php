@@ -22,38 +22,88 @@ class UtilityTest extends TestCase
     public function testUndoMove()
     {
         $db = $this->createMock(mysqli::class);
+        $moveId = 1;
         $gameId = 1;
-        $lastMoveId = 1;
-
-        $result = $db->expects($this->once())
-            ->method('prepare')
-            ->with('SELECT previous_id FROM moves WHERE game_id = ? AND id = ?')
-            ->method('bind_param')
-            ->with('ii', $gameId, $lastMoveId)
-            ->method('execute')
-            ->method('get_result')
-            ->method('fetch_array')
-            ->willReturn(['previous_id' => 0]);
-
-        $previousId = $result['previous_id'];
 
         $db->expects($this->once())
             ->method('prepare')
-            ->with('DELETE FROM moves WHERE game_id = ? AND id = ?')
+            ->with('DELETE FROM moves WHERE id = ? AND game_id = ?')
+            ->willReturn($stmt = $this->createMock(mysqli_stmt::class));
+
+        $stmt->expects($this->once())
             ->method('bind_param')
-            ->with('ii', $gameId, $lastMoveId)
-            ->method('execute');
+            ->with('ii', $moveId, $gameId)
+            ->willReturn(true);
+
+        $stmt->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $this->assertTrue(Utility::undoMove($db, $moveId, $gameId));
+    }
+
+    public function testGetPreviousMove()
+    {
+        $db = $this->createMock(mysqli::class);
+        $gameId = 1;
+        $moveId = 2;
+        $previousMoveId = 1;
+
+        $db->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT previous_id FROM moves WHERE game_id = ? ORDER BY id DESC LIMIT 1')
+            ->willReturn($stmt = $this->createMock(mysqli_stmt::class));
+
+        $stmt->expects($this->once())
+            ->method('bind_param')
+            ->with('i', $gameId)
+            ->willReturn(true);
+
+        $stmt->expects($this->once())
+            ->method('execute')
+            ->willReturn(true); // Assuming execution was successful
+
+        $stmt->expects($this->once())
+            ->method('get_result')
+            ->willReturn($result = $this->createMock(mysqli_result::class));
+
+        $result->expects($this->once())
+            ->method('fetch_assoc')
+            ->willReturn(['previous_id' => $previousMoveId]);
+
+        $this->assertEquals($previousMoveId, Utility::getPreviousMove($db, $gameId, $moveId));
+    }
+
+    public function testGetPreviousState()
+    {
+        $db = $this->createMock(mysqli::class);
+        $gameId = 1;
+        $previousMoveId = 1;
+        $state = 'state';
 
         $db->expects($this->once())
             ->method('prepare')
             ->with('SELECT state FROM moves WHERE game_id = ? AND id = ?')
-            ->method('bind_param')
-            ->with('ii', $gameId, $previousId)
-            ->method('execute')
-            ->method('get_result')
-            ->method('fetch_array')
-            ->willReturn(['state' => 'state']);
+            ->willReturn($stmt = $this->createMock(mysqli_stmt::class));
 
-        $this->assertEquals(['state', $previousId], Utility::undoMove($db, $gameId, $lastMoveId));
+        $stmt->expects($this->once())
+            ->method('bind_param')
+            ->with('ii', $gameId, $previousMoveId)
+            ->willReturn(true);
+
+        $stmt->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+
+        $stmt->expects($this->once())
+            ->method('get_result')
+            ->willReturn($result = $this->createMock(mysqli_result::class));
+
+        $result->expects($this->once())
+            ->method('fetch_assoc')
+            ->willReturn(['state' => $state]);
+
+        $this->assertEquals($state, Utility::getPreviousState($db, $gameId, $previousMoveId));
     }
+
 }

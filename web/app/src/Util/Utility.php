@@ -104,8 +104,19 @@ class Utility
         return min($lenCommon0, $lenCommon1) <= max($lenFrom, $lenTo);
     }
 
-    public static function undoMove(mysqli $db, int $gameId, int $lastMove)
+    public static function getPreviousMove(mysqli $db, int $gameId): int
     {
-        // stub
+        return -1; // stub
     }
+
+    public static function undoMove(mysqli $db, int $gameId, int $moveId): bool
+    {
+        return false; // stub
+    }
+
+    public static function getPreviousState(mysqli $db, int $gameId, int $previousMoveId): string
+    {
+        return ''; // stub
+    }
+
 }
