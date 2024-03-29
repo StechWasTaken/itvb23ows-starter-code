@@ -222,7 +222,7 @@
                 $db = DatabaseHelper::getDatabase();
                 $stmt = $db->prepare('SELECT * FROM moves WHERE game_id = '.$_SESSION['game_id']);
                 $stmt->execute();
-                $result = $stmt->get_result()->fetch_assoc();
+                $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
                 foreach ($result as $row)
                 {
