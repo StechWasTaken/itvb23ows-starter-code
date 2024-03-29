@@ -8,9 +8,15 @@ pipeline {
         }
         stage('phpunit tests') {
             steps {
-                sh 'cd web/app'
-                sh 'composer install'
-                sh 'vendor/bin/phpunit tests'
+                sh 'php -v'
+                sh 'composer -v'
+                sh 'ls'
+                dir('web') {
+                    dir('app') {
+                        sh 'composer install'
+                        sh 'vendor/bin/phpunit tests'
+                    }
+                }
             }
         }
         stage('sonarqube') {
