@@ -66,6 +66,6 @@ class Hand
 
     public function getPieces()
     {
-        return []; // stub
+        return array_merge([], $this->pieces);
     }
 }
