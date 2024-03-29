@@ -1,2 +1,2 @@
-FROM sonarqube:10.4.1.88267
+FROM sonarqube:10.4.1-community
 EXPOSE 9000
